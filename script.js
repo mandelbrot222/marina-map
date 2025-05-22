@@ -11,7 +11,7 @@ window.onload = function () {
   const colorMap = {
     "Docks": "burlywood",
     "Land": "cornsilk",
-    "Water": "blue",
+    "Water": null,
     "Parking Lot": "darkgray",
     "Fenced Yard": "lightgray",
     "Uphill": "darkolivegreen",
@@ -21,8 +21,12 @@ window.onload = function () {
   const shapes = svg.querySelectorAll("path");
   shapes.forEach((el) => {
     const label = el.getAttribute("data-label");
-    const baseColor = colorMap[label] || "yellow";
-    el.style.fill = baseColor;
+    if (label === "Water") {
+      el.style.fill = "url(#waterPattern)";
+    } else {
+      const baseColor = colorMap[label] || "yellow";
+      el.style.fill = baseColor;
+    }
   });
 
   const zoomScript = document.createElement("script");
@@ -55,13 +59,8 @@ window.onload = function () {
         if (!label) return;
 
         const shape = svg.querySelector(`[data-label='${label}']`);
-        if (shape) {
-          console.log("Row", i, "label=", label, "status=", status);
-          if (status === "occupied") {
-            shape.style.fill = "lightgreen";
-          }
-        } else {
-          console.warn("No shape found for label:", label);
+        if (shape && status === "occupied" && shape.getAttribute("data-label") !== "Water") {
+          shape.style.fill = "lightgreen";
         }
       });
     })
