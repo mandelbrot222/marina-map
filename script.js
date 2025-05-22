@@ -58,6 +58,9 @@ window.onload = function () {
       el.style.fill = "url(#waterPattern)";
     } else if (label === "Land") {
       el.style.fill = "url(#sandPattern)";
+    } else if (label === "Uphill") {
+      el.style.fill = "url(#mossPattern)";
+      el.style.fill = "url(#sandPattern)";
     } else {
       const baseColor = colorMap[label] || "yellow";
       el.style.fill = baseColor;
