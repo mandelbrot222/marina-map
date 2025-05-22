@@ -1,6 +1,6 @@
 
 window.onload = function () {
-  console.log("Map loading with verified texture priority...");
+  console.log("Map loading with pattern fill using switch logic...");
 
   const svg = document.querySelector("svg");
   if (!svg) {
@@ -35,27 +35,36 @@ window.onload = function () {
 
   svg.insertBefore(defs, svg.firstChild);
 
-  const colorMap = {
-    "Docks": "burlywood",
-    "Parking Lot": "darkgray",
-    "Fenced Yard": "lightgray",
-    "Building": "black"
-  };
-
   const shapes = Array.from(svg.querySelectorAll("path"));
   shapes.forEach((el) => {
-    const label = el.getAttribute("data-label")?.trim();
-    const lowerLabel = label?.toLowerCase();
+    const label = el.getAttribute("data-label")?.trim() || "";
+    const lowerLabel = label.toLowerCase();
 
-    if (lowerLabel === "water") {
-      el.style.fill = "url(#waterPattern)";
-    } else if (lowerLabel === "uphill") {
-      el.style.fill = "url(#mossPattern)";
-    } else if (lowerLabel === "land") {
-      el.style.fill = "url(#sandPattern)";
-    } else {
-      const baseColor = colorMap[label] || "yellow";
-      el.style.fill = baseColor;
+    switch (lowerLabel) {
+      case "water":
+        el.style.fill = "url(#waterPattern)";
+        break;
+      case "land":
+        el.style.fill = "url(#sandPattern)";
+        break;
+      case "uphill":
+        el.style.fill = "url(#mossPattern)";
+        break;
+      case "docks":
+        el.style.fill = "burlywood";
+        break;
+      case "parking lot":
+        el.style.fill = "darkgray";
+        break;
+      case "fenced yard":
+        el.style.fill = "lightgray";
+        break;
+      case "building":
+        el.style.fill = "black";
+        break;
+      default:
+        el.style.fill = "yellow";
+        break;
     }
   });
 
