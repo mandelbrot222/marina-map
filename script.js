@@ -1,6 +1,6 @@
 
 window.onload = function () {
-  console.log("Map loading with water, sand, and moss textures...");
+  console.log("Map loading with verified texture priority...");
 
   const svg = document.querySelector("svg");
   if (!svg) {
@@ -37,9 +37,6 @@ window.onload = function () {
 
   const colorMap = {
     "Docks": "burlywood",
-    "Land": null,
-    "Water": null,
-    "Uphill": null,
     "Parking Lot": "darkgray",
     "Fenced Yard": "lightgray",
     "Building": "black"
@@ -47,13 +44,15 @@ window.onload = function () {
 
   const shapes = Array.from(svg.querySelectorAll("path"));
   shapes.forEach((el) => {
-    const label = el.getAttribute("data-label");
-    if (label === "Water") {
+    const label = el.getAttribute("data-label")?.trim();
+    const lowerLabel = label?.toLowerCase();
+
+    if (lowerLabel === "water") {
       el.style.fill = "url(#waterPattern)";
-    } else if (label === "Land") {
-      el.style.fill = "url(#sandPattern)";
-    } else if (label === "Uphill") {
+    } else if (lowerLabel === "uphill") {
       el.style.fill = "url(#mossPattern)";
+    } else if (lowerLabel === "land") {
+      el.style.fill = "url(#sandPattern)";
     } else {
       const baseColor = colorMap[label] || "yellow";
       el.style.fill = baseColor;
@@ -93,7 +92,7 @@ window.onload = function () {
         if (
           shape &&
           status === "occupied" &&
-          !["Water", "Land", "Uphill"].includes(shape.getAttribute("data-label"))
+          !["water", "land", "uphill"].includes(label.toLowerCase())
         ) {
           shape.style.fill = "lightgreen";
         }
